@@ -48,8 +48,8 @@
 <div>
     <header>
         <img src="" alt="Consultor" class="profile-img">
-        <h1 id="profName">...</h1>
-        <h2 id="profRole">...</h2>
+        <h1 id="profName">BYD</h1>
+        <h2 id="profRole">Consultor Executivo</h2>
         <div class="social-links">
             <a href="#" class="social-instagram" target="_blank"><i class="fab fa-instagram"></i></a>
             <a href="#" id="linkWhatsTopo" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -99,17 +99,44 @@ const carImages = {
     17: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/BYD_Tang_EV_001.jpg/800px-BYD_Tang_EV_001.jpg"
 };
 
+// Dados padrão de segurança (Caso a nuvem falhe ou teste local)
+const defaultData = {
+    profile: { name: "Lucas", role: "Consultor Executivo BYD", phone: "5511999999999", instagram: "#", image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" },
+    cars: [
+        { id: 1, name: "BYD Dolphin Mini GL", price: "118.990", details: "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 9.000\nPreço Final: R$ 109.990" },
+        { id: 2, name: "BYD Dolphin Mini GS", price: "119.990", details: "Taxa 1,46%\nEntrada 70% (R$ 83.993)\n60x de R$ 999" },
+        { id: 3, name: "BYD Dolphin GS", price: "149.990", details: "Taxa 0%\nEntrada 60% (R$ 89.994)\n24x de R$ 2.669" },
+        { id: 4, name: "BYD Dolphin SE", price: "164.990", details: "Consulte as condições de financiamento direto com o consultor." },
+        { id: 5, name: "BYD King GL", price: "172.990", details: "Desconto Exclusivo: R$ 25.000\nPreço Final: R$ 147.990" },
+        { id: 6, name: "BYD King GS", price: "175.990", details: "Taxa 0%\nEntrada 70%\n18x sem juros" },
+        { id: 7, name: "BYD Song Pro GL", price: "189.990", details: "Desconto Exclusivo: R$ 28.500\nPreço Final: R$ 161.490" },
+        { id: 8, name: "BYD Song Pro GS", price: "199.990", details: "Taxa 0%\nEntrada 60%\n36x de R$ 2.361" },
+        { id: 9, name: "BYD Yuan Pro", price: "182.990", details: "Taxa 0%\nEntrada 60%\n24x sem juros" },
+        { id: 10, name: "BYD Yuan Plus", price: "235.990", details: "Taxa 0%\nEntrada 60%\n36x sem juros" },
+        { id: 11, name: "BYD Yuan Plus AWD", price: "269.990", details: "Consulte as condições de financiamento e bônus." },
+        { id: 12, name: "BYD Song Plus", price: "249.990", details: "Taxa 0%\nEntrada 60%\n36x sem juros" },
+        { id: 13, name: "BYD Song Plus Premium", price: "299.800", details: "Taxa 0%\nEntrada 50%\n36x sem juros" },
+        { id: 14, name: "BYD Seal", price: "299.990", details: "Taxa 0%\nEntrada 60%\n36x sem juros" },
+        { id: 15, name: "BYD Sealion", price: "339.990", details: "Taxa 0.99%\nEntrada 60%" },
+        { id: 16, name: "BYD Shark", price: "344.990", details: "Taxa 1.49%\nEntrada 60%" },
+        { id: 17, name: "BYD Atto 8", price: "399.990", details: "Taxa 0%\nEntrada 60%\n24x sem juros" }
+    ]
+};
+
 let appData = {};
 
 async function init() {
     try {
-        // Puxa o JSON com timestamp para quebrar o cache do navegador
+        // Tenta puxar os dados atualizados em tempo real do arquivo dados.json
         const res = await fetch('dados.json?t=' + new Date().getTime());
+        if(!res.ok) throw new Error("Arquivo não disponível");
         appData = await res.json();
-        renderLayout();
     } catch(e) {
-        document.getElementById('car-grid').innerText = "Erro ao carregar dados do showroom.";
+        // SE FALHAR (ERRO LOCAL OU ARQUIVO EM PROCESSAMENTO): Usa o backup padrão imediatamente!
+        console.log("Modo de segurança ativo: Carregando dados locais.");
+        appData = defaultData;
     }
+    renderLayout();
 }
 
 function renderLayout() {
@@ -117,7 +144,7 @@ function renderLayout() {
     document.getElementById('profRole').innerText = appData.profile.role;
     
     const imgEl = document.querySelector('.profile-img');
-    imgEl.src = appData.profile.image;
+    imgEl.src = appData.profile.image || defaultData.profile.image;
     imgEl.alt = appData.profile.name;
     
     const cleanPhone = appData.profile.phone.replace(/\D/g, '');
