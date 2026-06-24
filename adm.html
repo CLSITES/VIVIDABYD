@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Gestão Executiva | BYD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --byd-blue: #0056b3;
+            --byd-cyan: #00d2ff;
+            --dark-bg: #050507;
+            --card-bg: rgba(20, 22, 28, 0.9);
+            --text-light: #ffffff;
+            --text-muted: #a0aab5;
+        }
+
+        * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--dark-bg); color: var(--text-light); min-height: 100vh; }
+        .hidden { display: none !important; }
+
+        /* Tela de Login Centralizada */
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark-bg); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .login-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: 16px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .login-card h2 { font-size: 20px; margin-bottom: 20px; letter-spacing: 1px; color: var(--byd-cyan); }
+
+        /* Layout do Painel */
+        .admin-header { background: linear-gradient(135deg, #001a4d, #000000); padding: 30px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .admin-header h1 { font-size: 22px; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .admin-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        .panel-section { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .section-title { font-size: 18px; color: var(--byd-cyan); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Formulários Executivos */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media(min-width: 600px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .form-group.full-width { grid-column: span 2; }
+        @media(max-width: 600px) { .form-group.full-width { grid-column: span 1; } }
+
+        label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        input, textarea { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #0d0f14; color: #fff; font-size: 14px; transition: border-color 0.3s; }
+        input:focus, textarea:focus { border-color: var(--byd-cyan); outline: none; }
+        textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+
+        /* Lista de Carros */
+        .car-edit-row { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        .car-edit-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .car-edit-title i { color: var(--byd-cyan); }
+
+        /* Botões */
+        .btn-primary { display: block; width: 100%; background: linear-gradient(90deg, var(--byd-blue), var(--byd-cyan)); color: white; border: none; padding: 18px; font-size: 16px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 210, 255, 0.4); }
+        
+        .error-msg { color: #ff4a4a; font-size: 13px; margin-top: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<!-- Bloqueio por Senha -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+        <i class="fas fa-lock" style="font-size: 40px; color: var(--byd-cyan); margin-bottom: 20px;"></i>
+        <h2>Acesso Restrito BYD</h2>
+        <div class="form-group">
+            <input type="password" id="passInput" placeholder="Digite a senha de administrador" onkeydown="if(event.key === 'Enter') verificarSenha()">
+        </div>
+        <button class="btn-primary" onclick="verificarSenha()" style="padding: 12px;">Autenticar</button>
+        <p id="errorMsg" class="error-msg hidden">Senha incorreta. Acesso negado.</p>
+    </div>
+</div>
+
+<!-- Conteúdo do Painel (Oculto até Logar) -->
+<div id="adminContent" class="hidden">
+    <div class="admin-header">
+        <h1>Painel de Controle Showroom</h1>
+        <p style="color: var(--byd-cyan); font-size: 12px; margin-top: 5px; letter-spacing: 1px;">MODO DE EDIÇÃO EM TEMPO REAL</p>
+    </div>
+
+    <div class="admin-container">
+        
+        <!-- SEÇÃO: PERFIL DO VENDEDOR -->
+        <div class="panel-section">
+            <div class="section-title"><i class="fas fa-user-tie"></i> Informações do Consultor</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nome do Consultor</label>
+                    <input type="text" id="admName">
+                </div>
+                <div class="form-group">
+                    <label>Cargo / Cargo Executivo</label>
+                    <input type="text" id="admRole">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp (Apenas números com DDD, ex: 5511999999999)</label>
+                    <input type="text" id="admPhone">
+                </div>
+                <div class="form-group">
+                    <label>Link do Instagram (Opcional)</label>
+                    <input type="text" id="admInstagram" placeholder="https://instagram.com/seu_perfil">
+                </div>
+                <div class="form-group full-width">
+                    <label>URL da Imagem de Perfil (Link da Foto)</label>
+                    <input type="text" id="admProfileImg">
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO: PREÇOS E PROMOÇÕES -->
+        <div class="panel-section">
+            <div class="section-title"><i class="fas fa-car"></i> Gerenciar Veículos & Ofertas</div>
+            <div id="cars-edit-list"><!-- Gerado dinamicamente via JS --></div>
+        </div>
+
+        <button class="btn-primary" onclick="salvarTudo()"><i class="fas fa-save"></i> Publicar Todas as Alterações</button>
+    </div>
+</div>
+
+<script>
+// Dados Padrão (Caso o LocalStorage esteja vazio)
+const defaultData = {
+    profile: {
+        name: "Lucas",
+        role: "Consultor Executivo BYD",
+        phone: "5511999999999",
+        instagram: "#",
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+    },
+    cars: [
+        { id: 1, name: "BYD Dolphin Mini GL", price: "118.990", details: "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 9.000\nPreço Final: R$ 109.990" },
+        { id: 2, name: "BYD Dolphin Mini GS", price: "119.990", details: "Taxa 1,46%\nEntrada 70% (R$ 83.993)\n60x de R$ 999" },
+        { id: 3, name: "BYD Dolphin GS", price: "149.990", details: "Taxa 0%\nEntrada 60% (R$ 89.994)\n24x de R$ 2.669\n\nOU Trade-in de R$ 15.000 (Seminovo BYD)" },
+        { id: 4, name: "BYD Dolphin SE", price: "164.990", details: "Consulte as condições de financiamento e Trade-in direto com o consultor." },
+        { id: 5, name: "BYD King GL", price: "172.990", details: "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 25.000\nPreço Final: R$ 147.990" },
+        { id: 6, name: "BYD King GS", price: "175.990", details: "Taxa 0%\nEntrada 70% (R$ 123.193)\n18x de R$ 3.136\n\nOU Trade-in de R$ 10.000" },
+        { id: 7, name: "BYD Song Pro GL", price: "189.990", details: "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 28.500\nPreço Final: R$ 161.490" },
+        { id: 8, name: "BYD Song Pro GS", price: "199.990", details: "Taxa 0%\nEntrada 60% (R$ 119.994)\n36x de R$ 2.361\n\n+ Bônus Trade-in de R$ 10.000" },
+        { id: 9, name: "BYD Yuan Pro", price: "182.990", details: "Taxa 0%\nEntrada 60%\n24x sem juros" },
+        { id: 10, name: "BYD Yuan Plus", price: "235.990", details: "Taxa 0%\nEntrada 60%\n36x sem juros\n\n+ Bônus Trade-in de R$ 15.000" },
+        { id: 11, name: "BYD Yuan Plus AWD", price: "269.990", details: "Consulte as condições de financiamento e bônus de supervalorização." },
+        { id: 12, name: "BYD Song Plus", price: "249.990", details: "Taxa 0%\nEntrada 60%\n36x sem juros\n\n+ Bônus Trade-in de R$ 20.000 (Seminovo BYD) ou R$ 10.000 (Outras marcas)" },
+        { id: 13, name: "BYD Song Plus Premium", price: "299.800", details: "Taxa 0%\nEntrada 50%\n36x sem juros\n\n+ Bônus Trade-in de até R$ 40.000" },
+        { id: 14, name: "BYD Seal", price: "299.990", details: "Taxa 0%\nEntrada 60%\n36x sem juros\n\nOU Bônus Trade-in de R$ 40.000" },
+        { id: 15, name: "BYD Sealion", price: "339.990", details: "Taxa 0.99%\nEntrada 60%\n24x\n\nOU Bônus Trade-in de R$ 25.000" },
+        { id: 16, name: "BYD Shark", price: "344.990", details: "Taxa 1.49%\nEntrada 60%\n24x\n\nOU Bônus Trade-in de R$ 15.000" },
+        { id: 17, name: "BYD Atto 8", price: "399.990", details: "Taxa 0%\nEntrada 60%\n24x sem juros\n\nOU Bônus Trade-in de R$ 20.000 (Seminovo BYD)" }
+    ]
+};
+
+let currentData = JSON.parse(localStorage.getItem('bydDataShowroom')) || defaultData;
+
+// Sistema Simples de Login solicitado
+function verificarSenha() {
+    const password = document.getElementById('passInput').value;
+    if(password === 'adm') {
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('adminContent').classList.remove('hidden');
+        carregarPainel();
+    } else {
+        document.getElementById('errorMsg').classList.remove('hidden');
+    }
+}
+
+function carregarPainel() {
+    // Carrega dados do perfil nos inputs
+    document.getElementById('admName').value = currentData.profile.name;
+    document.getElementById('admRole').value = currentData.profile.role;
+    document.getElementById('admPhone').value = currentData.profile.phone;
+    document.getElementById('admInstagram').value = currentData.profile.instagram;
+    document.getElementById('admProfileImg').value = currentData.profile.image;
+
+    // Carrega lista de carros com campos de texto editáveis
+    const listContainer = document.getElementById('cars-edit-list');
+    listContainer.innerHTML = '';
+    
+    currentData.cars.forEach(car => {
+        listContainer.innerHTML += `
+            <div class="car-edit-row">
+                <div class="car-edit-title"><i class="fas fa-chevron-right"></i> ${car.name}</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Preço Sugerido (R$)</label>
+                        <input type="text" id="p-price-${car.id}" value="${car.price}">
+                    </div>
+                    <div class="form-group">
+                        <label>Condições de Financiamento / Texto da Promoção</label>
+                        <textarea id="p-desc-${car.id}">${car.details}</textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function salvarTudo() {
+    // Salva perfil
+    currentData.profile.name = document.getElementById('admName').value;
+    currentData.profile.role = document.getElementById('admRole').value;
+    currentData.profile.phone = document.getElementById('admPhone').value;
+    currentData.profile.instagram = document.getElementById('admInstagram').value;
+    currentData.profile.image = document.getElementById('admProfileImg').value;
+
+    // Salva carros
+    currentData.cars.forEach(car => {
+        car.price = document.getElementById(`p-price-${car.id}`).value;
+        car.details = document.getElementById(`p-desc-${car.id}`).value;
+    });
+
+    // Salva no LocalStorage unificado
+    localStorage.setItem('bydDataShowroom', JSON.stringify(currentData));
+    alert('Alterações publicadas com sucesso! Atualize o site principal para ver as mudanças.');
+}
+</script>
+</body>
+</html>
