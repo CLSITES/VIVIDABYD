@@ -1,0 +1,28 @@
+{
+  "profile": {
+    "name": "Lucas",
+    "role": "Consultor Executivo BYD",
+    "phone": "5511999999999",
+    "instagram": "#",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+  },
+  "cars": [
+    { "id": 1, "name": "BYD Dolphin Mini GL", "price": "118.990", "details": "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 9.000\nPreço Final: R$ 109.990" },
+    { "id": 2, "name": "BYD Dolphin Mini GS", "price": "119.990", "details": "Taxa 1,46%\nEntrada 70% (R$ 83.993)\n60x de R$ 999" },
+    { "id": 3, "name": "BYD Dolphin GS", "price": "149.990", "details": "Taxa 0%\nEntrada 60% (R$ 89.994)\n24x de R$ 2.669\n\nOU Trade-in de R$ 15.000 (Seminovo BYD)" },
+    { "id": 4, "name": "BYD Dolphin SE", "price": "164.990", "details": "Consulte as condições de financiamento e Trade-in direto com o consultor." },
+    { "id": 5, "name": "BYD King GL", "price": "172.990", "details": "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 25.000\nPreço Final: R$ 147.990" },
+    { "id": 6, "name": "BYD King GS", "price": "175.990", "details": "Taxa 0%\nEntrada 70% (R$ 123.193)\n18x de R$ 3.136\n\nOU Trade-in de R$ 10.000" },
+    { "id": 7, "name": "BYD Song Pro GL", "price": "189.990", "details": "Condição Especial Venda Direta / CPF\n\nDesconto Exclusivo: R$ 28.500\nPreço Final: R$ 161.490" },
+    { "id": 8, "name": "BYD Song Pro GS", "price": "199.990", "details": "Taxa 0%\nEntrada 60% (R$ 119.994)\n36x de R$ 2.361\n\n+ Bônus Trade-in de R$ 10.000" },
+    { "id": 9, "name": "BYD Yuan Pro", "price": "182.990", "details": "Taxa 0%\nEntrada 60%\n24x sem juros" },
+    { "id": 10, "name": "BYD Yuan Plus", "price": "235.990", "details": "Taxa 0%\nEntrada 60%\n36x sem juros\n\n+ Bônus Trade-in de R$ 15.000" },
+    { "id": 11, "name": "BYD Yuan Plus AWD", "price": "269.990", "details": "Consulte as condições de financiamento e bônus de supervalorização." },
+    { "id": 12, "name": "BYD Song Plus", "price": "249.990", "details": "Taxa 0%\nEntrada 60%\n36x sem juros\n\n+ Bônus Trade-in de R$ 20.000 (Seminovo BYD) ou R$ 10.000 (Outras marcas)" },
+    { "id": 13, "name": "BYD Song Plus Premium", "price": "299.800", "details": "Taxa 0%\nEntrada 50%\n36x sem juros\n\n+ Bônus Trade-in de até R$ 40.000" },
+    { "id": 14, "name": "BYD Seal", "price": "299.990", "details": "Taxa 0%\nEntrada 60%\n36x sem juros\n\nOU Bônus Trade-in de R$ 40.000" },
+    { "id": 15, "name": "BYD Sealion", "price": "339.990", "details": "Taxa 0.99%\nEntrada 60%\n24x\n\nOU Bônus Trade-in de R$ 25.000" },
+    { "id": 16, "name": "BYD Shark", "price": "344.990", "details": "Taxa 1.49%\nEntrada 60%\n24x\n\nOU Bônus Trade-in de R$ 15.000" },
+    { "id": 17, "name": "BYD Atto 8", price: "399.990", "details": "Taxa 0%\nEntrada 60%\n24x sem juros\n\nOU Bônus Trade-in de R$ 20.000 (Seminovo BYD)" }
+  ]
+}
